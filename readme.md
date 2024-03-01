@@ -1,9 +1,28 @@
 # Cogito x Infor
 
+## Prerequisite to run the project:
+
+- Node v20 or newer
+- Python v3.10 or newer
+
+## Run project:
+
+### Backend:
+
+```bash
+python(3) manage.py runserver
+```
+
+### Frontend:
+
+```bash
+npm run dev
+```
 
 ## Table of contents
 
 ## Contributors
+
 <table align="center">
   <tr>
     <td align="center">
