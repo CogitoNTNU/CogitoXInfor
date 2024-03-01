@@ -21,6 +21,14 @@ npm run dev
 
 ## Table of contents
 
+### TODO:
+
+- Look at the code base
+- Look at data and add to database (django)
+- Find out how to add a recommendation systems
+- Implement recommendation systems
+- Test recommendation systems
+
 ## Contributors
 
 <table align="center">
