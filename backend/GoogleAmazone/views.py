@@ -47,7 +47,7 @@ def GetRecommendationsOnProduct(request):
 
             responseSerializer = ProductsSerializer(recommendations, many=True)
             return Response(responseSerializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    return Response({"error": "Invalid request"}, status=status.HTTP_400_BAD_REQUEST)

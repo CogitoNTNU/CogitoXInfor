@@ -13,6 +13,6 @@ from .views import GetProducts, GetRecommendationsOnProduct
 
 # TODO Add uls here to the different parts functions of the project
 urlpatterns = [
-    path("Products", GetProducts, name="GetProducts"),
-    path("Recommendations", GetRecommendationsOnProduct, name="GetRecommendationsOnProduct"),
+    path("products", GetProducts, name="GetProducts"),
+    path("recommendations", GetRecommendationsOnProduct, name="GetRecommendationsOnProduct"),
 ]
