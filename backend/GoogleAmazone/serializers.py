@@ -14,3 +14,6 @@ class GetProductsSerializer(serializers.Serializer):
     amount = serializers.IntegerField(help_text="Amount of products to be returned.", default=20)
     search = serializers.CharField(help_text="Search string to be used to filter products.", default="")
     offset = serializers.IntegerField(help_text="Offset of products to be returned.", default=0)
+
+class GetProductSerializer(serializers.Serializer):
+    id = serializers.CharField(max_length=100, help_text="Product ID to get the product details.")

@@ -1,10 +1,8 @@
 import axios from "axios";
-import { GetProduct, Product } from "../types";
+import { GetProducts, Product } from "../types";
 import { apiRoutes } from "../routes/routeDefinitions";
 
-export const GetProducts = async (
-  params: GetProduct
-): Promise<Product[] | null> => {
+const GetProducts = async (params: GetProducts): Promise<Product[] | null> => {
   try {
     const response = await axios.get<Product[]>(`${apiRoutes.products}`, {
       params,
@@ -16,7 +14,9 @@ export const GetProducts = async (
       throw new Error("Error in getProducts");
     }
   } catch (error) {
-    console.error("Error in getGraphTraversalMethods:", error);
+    console.error("Error in getProducts:", error);
     return null;
   }
 };
+
+export { GetProducts };

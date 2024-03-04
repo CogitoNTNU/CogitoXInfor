@@ -11,8 +11,12 @@ export interface RecommendationFormat {
   amount: number;
 }
 
-export interface GetProduct {
+export interface GetProducts {
   amount: number;
   search: string;
   offset: number;
+}
+
+export interface GetProduct {
+  id: string;
 }
