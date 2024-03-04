@@ -162,3 +162,7 @@ cython_debug/
 .AppleDouble
 .LSOverride
 
+# frontend
+node_modules/
+
+
