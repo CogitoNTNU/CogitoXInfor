@@ -9,10 +9,10 @@ Function views
     2. Add a URL to urlpatterns:  path('', views.home, name='home')
 """
 from django.urls import path
-from .views import GetProducts, GetRecommendationsOnProduct
+from .views import GetProducts, GetRecommendationsOnProduct, GetProduct
 
-# TODO Add uls here to the different parts functions of the project
 urlpatterns = [
     path("products", GetProducts, name="GetProducts"),
+    path("product", GetProduct, name="GetProduct"),
     path("recommendations", GetRecommendationsOnProduct, name="GetRecommendationsOnProduct"),
 ]

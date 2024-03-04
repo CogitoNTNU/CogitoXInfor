@@ -7,7 +7,7 @@ from rest_framework import status
 # Create your views here.
 
 from .models import Products
-from .serializers import ProductsSerializer, GetRecommendationsOnProductSerializer, GetProductsSerializer
+from .serializers import ProductsSerializer, GetRecommendationsOnProductSerializer, GetProductsSerializer, GetProductSerializer
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
@@ -23,6 +23,24 @@ def GetProducts(request):
             offset = serializer.validated_data.get("offset")
             products = Products.objects.filter(title__contains=search)[offset:offset+amount]
             responseSerializer = ProductsSerializer(products, many=True)
+            return Response(responseSerializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    return Response({"error": "Invalid request"}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def GetProduct(request):
+    """
+    Get products from the database
+    """
+    try:
+        serializer = GetProductSerializer(data=request.query_params)
+        if serializer.is_valid():
+            id = serializer.validated_data.get("id")
+            product = Products.objects.get(id=id)
+            responseSerializer = ProductsSerializer(product, many=False)
             return Response(responseSerializer.data, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
