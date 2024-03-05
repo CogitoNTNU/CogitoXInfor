@@ -19,6 +19,7 @@ docker-compose up --build
 
 ```bash
 cd frontend
+npm ci
 npm run dev
 ```
 
