@@ -24,3 +24,12 @@ typing_extensions==4.9.0
 tzdata==2023.4
 uritemplate==4.1.1
 urllib3==2.1.0
+huggingface-hub
+numpy
+Pillow
+scikit-learn
+scipy
+torch
+tqdm
+transformers
+sentence-transformers==2.5.1
