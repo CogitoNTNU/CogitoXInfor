@@ -1,16 +1,21 @@
 import React from "react";
 import { Product } from "../types";
 import ProductCard from "./ProductCard";
+import { useNavigate } from "react-router-dom";
 
 interface ProductCardGridProps {
   products: Product[];
 }
 
 const ProductCardGrid: React.FC<ProductCardGridProps> = ({ products }) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid-container">
       {products.map((product, index) => (
-        <ProductCard key={index} product={product} />
+        <button key={index} onClick={() => navigate("/product/" + product.id)}>
+          <ProductCard key={index} product={product} />
+        </button>
       ))}
     </div>
   );

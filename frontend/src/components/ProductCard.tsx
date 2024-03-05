@@ -8,10 +8,6 @@ interface ProductProps {
 const ProductCard: React.FC<ProductProps> = ({ product }) => {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
-  const toggleDescription = () => {
-    setShowFullDescription(!showFullDescription);
-  };
-
   const renderDescription = () => {
     if (showFullDescription || product.description.split(".").length <= 3) {
       return product.description;
@@ -23,16 +19,20 @@ const ProductCard: React.FC<ProductProps> = ({ product }) => {
   };
 
   return (
-    <div className="max-w-xs rounded overflow-hidden shadow-lg">
+    <div
+      className="max-w-xs rounded overflow-hidden shadow-lg product-card"
+      onMouseEnter={() => setShowFullDescription(true)}
+      onMouseLeave={() => setShowFullDescription(false)}
+    >
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2">{product.title}</div>
-        <p className="text-gray-700 text-base" onClick={toggleDescription}>
+        <p className="text-gray-700 text-base">
           {renderDescription()}
           {!showFullDescription &&
-            product.description.split(".").length > 2 && (
+            product.description.split(".").length > 1 && (
               <span className="text-blue-500 cursor-pointer">
                 {" "}
-                ... (click on the text to read more)
+                ... (hover over the card to read more)
               </span>
             )}
         </p>
@@ -42,7 +42,7 @@ const ProductCard: React.FC<ProductProps> = ({ product }) => {
           {product.manufacturer}
         </span>
         <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
-          ${product.price.toFixed(2)}
+          ${product.price.toFixed(1)}
         </span>
       </div>
     </div>
