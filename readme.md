@@ -1,9 +1,40 @@
 # Cogito x Infor
 
+## Prerequisite to run the project:
+
+- Node v20 or newer
+- Docker (desktop)
+- Python v3.10 or newer
+
+## Run project:
+
+### Backend (must have docker running):
+
+```bash
+cd backend
+docker-compose up --build
+```
+
+### Frontend:
+
+```bash
+cd frontend
+npm ci
+npm run dev
+```
 
 ## Table of contents
 
+### TODO:
+
+- Look at the code base
+- Look at the data
+- Find out how to add a recommendation systems
+- Implement recommendation systems
+- Test recommendation systems
+
 ## Contributors
+
 <table align="center">
   <tr>
     <td align="center">
