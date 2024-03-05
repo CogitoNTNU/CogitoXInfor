@@ -5,6 +5,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 # Create your views here.
+import pandas as pd
+import numpy as np
+from openai import OpenAI
+import openai
 
 from .models import Products
 from .serializers import ProductsSerializer, GetRecommendationsOnProductSerializer, GetProductsSerializer, GetProductSerializer
@@ -59,9 +63,12 @@ def GetRecommendationsOnProduct(request):
             id = serializer.validated_data.get("id")
             amount = serializer.validated_data.get("amount")
             product = Products.objects.get(id=id)
-            # TODO: Add a recommendation algorithm here!!!
+            # TODO: Add a recommendation algorithm here!!!      
             
-            recommendations = Products # Change this to the actual recommendations
+            liste = Products.objects.all()
+            liste = list(filter(lambda x: x.price > product.price + 100, liste))
+            
+            recommendations =  liste[:amount] # Change this to the actual recommendations
 
             responseSerializer = ProductsSerializer(recommendations, many=True)
             return Response(responseSerializer.data, status=status.HTTP_200_OK)
