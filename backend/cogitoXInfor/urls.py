@@ -20,5 +20,5 @@ from django.urls import path, include
 # TODO Add uls here to the different parts, mainly the parts for the API
 urlpatterns = [
     path('admin/', admin.site.urls, name="admin"),
-    path("", include(""))
+    path("api/", include("GoogleAmazone.urls"), name="api")
 ]
