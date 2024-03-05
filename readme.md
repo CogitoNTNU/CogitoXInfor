@@ -3,19 +3,22 @@
 ## Prerequisite to run the project:
 
 - Node v20 or newer
+- Docker (desktop)
 - Python v3.10 or newer
 
 ## Run project:
 
-### Backend:
+### Backend (must have docker running):
 
 ```bash
-python(3) manage.py runserver
+cd backend
+docker-compose up --build
 ```
 
 ### Frontend:
 
 ```bash
+cd frontend
 npm run dev
 ```
 
@@ -24,7 +27,7 @@ npm run dev
 ### TODO:
 
 - Look at the code base
-- Look at data and add to database (django)
+- Look at the data
 - Find out how to add a recommendation systems
 - Implement recommendation systems
 - Test recommendation systems
