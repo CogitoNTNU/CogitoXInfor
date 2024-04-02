@@ -75,53 +75,80 @@ def GetRecommendationsOnProduct(request):
             amount = serializer.validated_data.get("amount")
             product = Products.objects.get(id=id)
             # TODO: Add a recommendation algorithm here!!!
-            all_products = Products.objects.all()
+            all_products = Products.objects.all()[:500]
+            product_titles = [product.title for product in all_products]
             product_descriptions = [product.description for product in all_products]
             print("Selected product = ", product, flush=True)
+
+            # Matching product id's with product titles
+            id_title = {}
+            for product in all_products:
+                id_title[product.id] = product.title
+
+            # Matching product id's with product descriptions
             id_desc = {}
             for product in all_products:
                 id_desc[product.id] = product.description
             # print("id_desc = ", id_desc, flush=True)
-
-            desc_encoding = {}
-
-            emb1 = model.encode(product.description)
-            for desc in product_descriptions:
-                emb2 = model.encode(desc)
+                
+            # EMBEDDING ============================================================================================================
+                
+            #Encoding titles of all other products and using cosine similarity (vectors)
+            title_encoding = {}
+            emb1 = model.encode(product.title)
+            for title in product_titles:
+                emb2 = model.encode(title)
                 cos_sim = util.cos_sim(emb1, emb2)
+                title_encoding[title] = cos_sim
+
+            # Encoding descriptions of all other products and using cosine similarity (vectors)
+            desc_encoding = {}
+            emb3 = model.encode(product.description)
+            for desc in product_descriptions:
+                emb4 = model.encode(desc)
+                cos_sim = util.cos_sim(emb3, emb4)
                 desc_encoding[desc] = cos_sim
 
-            # print("test", flush=True)
-            # print("Desc_encoding = ", desc_encoding, flush=True)
+            # 
 
-            sorted_desc_encoding = dict(
-                sorted(desc_encoding.items(), key=lambda item: item[1], reverse=True)
-            )
+            # TITLES ============================================================================================================
+                
+            # Sort the encoded titles by cosine similarity
+            # sorted_titles = sorted(title_encoding.items(), key=lambda item: item[1], reverse=True)
 
-            # print("Sorted = ", sorted_desc_encoding, flush=True)
+            # # Skip the first one (the product itself) and select the next top titles
+            # top_titles = [title for title, cos_sim in sorted_titles[1:amount]]
 
-            sorted_products = sorted(
-                sorted_desc_encoding.items(), key=lambda item: item[1], reverse=True
-            )
+            # # Get the top product IDs from the top titles
+            # top_product_ids_for_titles = [
+            #     id for id, title in id_title.items() if title in top_titles
+            # ]
 
-            # Skip the first one (the product itself) and get the next 5 products
-            top_descriptions = [desc for desc, cos_sim in sorted_products[1:6]]
-            # print("Top descriptions =", top_descriptions, flush=True)
+            # DESCRIPTIONS ============================================================================================================
 
-            # Get the top product IDs from the top descriptions
-            top_product_ids = [
-                id for id, desc in id_desc.items() if desc in top_descriptions
-            ]
+            # Connecting the top descriptions to their respective products
+            # sorted_descriptions = sorted(
+            #     desc_encoding.items(), key=lambda item: item[1], reverse=True
+            # )
+            # # print("Sorted descriptions = ", sorted_descriptions, flush=True)
+
+            # # Skip the first one (the product itself) and get the next 5 products
+            # top_descriptions = [desc for desc, cos_sim in sorted_descriptions[1:6]]
+            # # print("Top descriptions =", top_descriptions, flush=True)
+
+            # # Get the top product IDs from the top descriptions
+            # top_product_ids = [
+            #     id for id, desc in id_desc.items() if desc in top_descriptions
+            # ]
 
             # Retrieve the top products based on the IDs
-            top_products = Products.objects.filter(id__in=top_product_ids)
+            top_products_descriptions = Products.objects.filter(id__in=top_product_ids)
 
-            print("Top products = ", top_products, flush=True)
+            # COMBINING TITLES AND DESCRIPTIONS =========================================================================================
 
-            # print(product_descriptions)
-            # embeddings = model.encode(product_descriptions)
 
-            recommendations = top_products  # Change this to the actual recommendations
+
+            recommendations = None  # Change this to the actual recommendations
 
             responseSerializer = ProductsSerializer(recommendations, many=True)
             return Response(responseSerializer.data, status=status.HTTP_200_OK)
