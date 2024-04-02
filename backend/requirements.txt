@@ -28,4 +28,7 @@ urllib3==2.1.0
 Pandas==2.2.1
 numpy==1.26.4
 openai==1.13.3
-
+torch
+transformers
+sentence-transformers==2.5.1
+implicit
