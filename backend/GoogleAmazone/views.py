@@ -4,13 +4,14 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
+from sentence_transformers import SentenceTransformer
 # Create your views here.
 import pandas as pd
 import numpy as np
 from openai import OpenAI
 import openai
 
-from .models import Products
+from .models import Products, Recommendations
 from .serializers import ProductsSerializer, GetRecommendationsOnProductSerializer, GetProductsSerializer, GetProductSerializer
 
 @api_view(['GET'])
@@ -68,6 +69,9 @@ def GetRecommendationsOnProduct(request):
             liste = Products.objects.all()
             liste = list(filter(lambda x: x.price > product.price + 100, liste))
             
+            #prøver embedding 
+            listofids = Recommendations.recommend(product)
+
             recommendations =  liste[:amount] # Change this to the actual recommendations
 
             responseSerializer = ProductsSerializer(recommendations, many=True)
