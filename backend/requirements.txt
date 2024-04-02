@@ -33,3 +33,4 @@ torch
 tqdm
 transformers
 sentence-transformers==2.5.1
+nltk

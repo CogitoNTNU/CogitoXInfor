@@ -19,6 +19,35 @@ from .serializers import (
     GetProductSerializer,
 )
 
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+# Initialize lemmatizer
+# lemmatizer = WordNetLemmatizer()
+
+# def preprocess_text(text):
+#     # Convert text to lowercase
+#     text = text.lower()
+#     # Remove punctuation and special characters
+#     text = re.sub(r'\W', ' ', text)
+#     # Remove all single characters
+#     text = re.sub(r'\s+[a-zA-Z]\s+', ' ', text)
+#     # Remove single characters from the start
+#     text = re.sub(r'\^[a-zA-Z]\s+', ' ', text) 
+#     # Replace multiple spaces with a single space
+#     text = re.sub(r'\s+', ' ', text, flags=re.I)
+#     # Removing digits or numbers
+#     text = re.sub(r'\d', '', text)
+#     # Lemmatization
+#     tokens = text.split()
+#     tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stopwords.words('english')]
+#     return ' '.join(tokens)
+
 
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
@@ -75,7 +104,7 @@ def GetRecommendationsOnProduct(request):
             amount = serializer.validated_data.get("amount")
             product = Products.objects.get(id=id)
             # TODO: Add a recommendation algorithm here!!!
-            all_products = Products.objects.all()[:500]
+            all_products = Products.objects.all()[:10]
             product_titles = [product.title for product in all_products]
             product_descriptions = [product.description for product in all_products]
             print("Selected product = ", product, flush=True)
@@ -92,7 +121,8 @@ def GetRecommendationsOnProduct(request):
             # print("id_desc = ", id_desc, flush=True)
                 
             # EMBEDDING ============================================================================================================
-                
+            
+            print("", flush=True)
             #Encoding titles of all other products and using cosine similarity (vectors)
             title_encoding = {}
             emb1 = model.encode(product.title)
@@ -100,6 +130,7 @@ def GetRecommendationsOnProduct(request):
                 emb2 = model.encode(title)
                 cos_sim = util.cos_sim(emb1, emb2)
                 title_encoding[title] = cos_sim
+            print("Title encoding = ", title_encoding, flush=True)
 
             # Encoding descriptions of all other products and using cosine similarity (vectors)
             desc_encoding = {}
@@ -108,47 +139,38 @@ def GetRecommendationsOnProduct(request):
                 emb4 = model.encode(desc)
                 cos_sim = util.cos_sim(emb3, emb4)
                 desc_encoding[desc] = cos_sim
+            # print("Product descriptions = ", product_descriptions, flush=True)
+            print("Description encoding = ", desc_encoding, flush=True)
+            print("", flush=True)
 
-            # 
+            # Combining and taking the average of the two encodings
+            combined_encoding = {}
+            for title, cos_sim in title_encoding.items():
+                id = [id for id, title2 in id_title.items() if title == title2][0]
+                print("Current product ID = ", id, flush=True)
+                desc = id_desc[id]
+                print("Description of current product = ", desc, flush=True)
+                combined_encoding[title] = (cos_sim + desc_encoding[desc]) / 2
+            print("",flush=True)
+            print("Combined encoding = ", combined_encoding, flush=True)
+            
 
-            # TITLES ============================================================================================================
-                
-            # Sort the encoded titles by cosine similarity
-            # sorted_titles = sorted(title_encoding.items(), key=lambda item: item[1], reverse=True)
+            # Sorting the combined encodings
+            sorted_combined = sorted(combined_encoding.items(), key=lambda item: item[1], reverse=True)
 
-            # # Skip the first one (the product itself) and select the next top titles
-            # top_titles = [title for title, cos_sim in sorted_titles[1:amount]]
+            # Skip the first one (the product itself) and select the next top products
+            top_products = [title for title, cos_sim in sorted_combined[1:amount]]
 
-            # # Get the top product IDs from the top titles
-            # top_product_ids_for_titles = [
-            #     id for id, title in id_title.items() if title in top_titles
-            # ]
+            # Get the top product IDs from the top products
+            top_product_ids = [
+                id for id, title in id_title.items() if title in top_products
+            ]
 
-            # DESCRIPTIONS ============================================================================================================
+            # Get the actual top products from the IDs
+            top_products = Products.objects.filter(id__in=top_product_ids)
+            print("Top products = ", top_products, flush=True)
 
-            # Connecting the top descriptions to their respective products
-            # sorted_descriptions = sorted(
-            #     desc_encoding.items(), key=lambda item: item[1], reverse=True
-            # )
-            # # print("Sorted descriptions = ", sorted_descriptions, flush=True)
-
-            # # Skip the first one (the product itself) and get the next 5 products
-            # top_descriptions = [desc for desc, cos_sim in sorted_descriptions[1:6]]
-            # # print("Top descriptions =", top_descriptions, flush=True)
-
-            # # Get the top product IDs from the top descriptions
-            # top_product_ids = [
-            #     id for id, desc in id_desc.items() if desc in top_descriptions
-            # ]
-
-            # Retrieve the top products based on the IDs
-            top_products_descriptions = Products.objects.filter(id__in=top_product_ids)
-
-            # COMBINING TITLES AND DESCRIPTIONS =========================================================================================
-
-
-
-            recommendations = None  # Change this to the actual recommendations
+            recommendations = top_products # Change this to the actual recommendations
 
             responseSerializer = ProductsSerializer(recommendations, many=True)
             return Response(responseSerializer.data, status=status.HTTP_200_OK)
