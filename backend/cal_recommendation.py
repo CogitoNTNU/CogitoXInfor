@@ -24,7 +24,7 @@ for product in all_products:
     id_title[product.id] = model.encode(product.title)
     id_desc[product.id] = model.encode(product.description)
     
-#Vi kom så langt! 
+#Vi kom så langt! jeg la til dette for å teste  
 
 
 # print("id_desc = ", id_desc, flush=True)
