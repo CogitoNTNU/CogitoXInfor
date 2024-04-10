@@ -23,7 +23,7 @@ model = SentenceTransformer("all-MiniLM-L6-v2")
 print("Test4", flush=True)
 
 all_products = Products.objects.all()
-print("All products = ", all_products, flush=True)
+# print("All products = ", all_products, flush=True)
 product_titles = [product.title for product in all_products]
 product_descriptions = [product.description for product in all_products]
 
@@ -70,13 +70,13 @@ for pair, sim_title in list(combined_dict.items()):
     recommendation.save()
 
 print("Recommendations saved to the database", flush=True)
-print("Cosine similarities titles = ", cos_sim_title, flush=True)
-print("", flush=True)
-print("Cosine similarities descriptions = ", cos_sim_desc, flush=True)
-print("", flush=True)
+# print("Cosine similarities titles = ", cos_sim_title, flush=True)
+# print("", flush=True)
+# print("Cosine similarities descriptions = ", cos_sim_desc, flush=True)
+# print("", flush=True)
 
 
-print("Combined dictionary = ", combined_dict, flush=True)
+# print("Combined dictionary = ", combined_dict, flush=True)
 
 
 
