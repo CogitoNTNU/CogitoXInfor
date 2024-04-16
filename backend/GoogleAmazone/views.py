@@ -8,8 +8,8 @@ from sentence_transformers import SentenceTransformer
 # Create your views here.
 import pandas as pd
 import numpy as np
-from openai import OpenAI
-import openai
+# from openai import OpenAI
+# import openai
 
 from .models import Products, Recommendations
 from .serializers import ProductsSerializer, GetRecommendationsOnProductSerializer, GetProductsSerializer, GetProductSerializer
@@ -64,15 +64,27 @@ def GetRecommendationsOnProduct(request):
             id = serializer.validated_data.get("id")
             amount = serializer.validated_data.get("amount")
             product = Products.objects.get(id=id)
-            # TODO: Add a recommendation algorithm here!!!      
+            print("Selected product = ", product, flush=True)
             
-            liste = Products.objects.all()
-            liste = list(filter(lambda x: x.price > product.price + 100, liste))
-            
-            #prøver embedding 
-            listofids = Recommendations.recommend(product)
+            embeddings = Recommendations.objects.filter(col=id).values("row", "title_similarity", "description_similarity")[:5]
+            # print("Embeddings = ", embeddings, flush=True)
 
-            recommendations =  liste[:amount] # Change this to the actual recommendations
+            recommendations_dict = {}
+            for product in embeddings:
+                product_id = product["row"]
+                title_similarity = product["title_similarity"]
+                description_similarity = product["description_similarity"]
+                recommendations_dict[product_id] = title_similarity*0.8 + description_similarity*0.2
+
+            # Sort the recommendations by similarity
+            recommendations_dict = dict(sorted(recommendations_dict.items(), key=lambda item: item[1], reverse=True))
+            print("Recommendations dict = ", recommendations_dict, flush=True)
+
+            # Get the top amount recommendations
+            recommendations = Products.objects.filter(id__in=list(recommendations_dict.keys()))[:5]
+            print("Recommendations = ", recommendations, flush=True)
+            # print("Embeddings = ", embeddings, flush=True)
+            # print("Embeddings[0] = ", embeddings[0], flush=True)
 
             responseSerializer = ProductsSerializer(recommendations, many=True)
             return Response(responseSerializer.data, status=status.HTTP_200_OK)
