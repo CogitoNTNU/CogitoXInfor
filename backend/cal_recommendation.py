@@ -61,7 +61,7 @@ combined_dict = {}
 
 for key, value in cos_sim_title.items():
     if key in cos_sim_desc:
-        combined_dict[key] = (value + cos_sim_desc[key]) / 2
+        combined_dict[key] = "f{value},{cos_sim_desc[key]}"
 
 for pair, sim_title in list(combined_dict.items()):
     sim_combined = combined_dict[pair]
