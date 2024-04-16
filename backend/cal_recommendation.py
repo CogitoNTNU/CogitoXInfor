@@ -22,7 +22,7 @@ model = SentenceTransformer("all-MiniLM-L6-v2")
 
 print("Test4", flush=True)
 
-all_products = Products.objects.all()[:10]
+all_products = Products.objects.all()
 print("All products = ", all_products, flush=True)
 product_titles = [product.title for product in all_products]
 product_descriptions = [product.description for product in all_products]
