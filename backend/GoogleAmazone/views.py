@@ -108,6 +108,7 @@ def GetRecommendationsOnProduct(request):
             product_titles = [product.title for product in all_products]
             product_descriptions = [product.description for product in all_products]
             print("Selected product = ", product, flush=True)
+<<<<<<< Updated upstream
 
             # Matching product id's with product titles
             id_title = {}
@@ -131,6 +132,10 @@ def GetRecommendationsOnProduct(request):
                 cos_sim = util.cos_sim(emb1, emb2)
                 title_encoding[title] = cos_sim
             print("Title encoding = ", title_encoding, flush=True)
+=======
+            embeddings = Recommendations.objects.filter(col=id).values("row", "title_similarity", "description_similarity")[:5]
+            # print("Embeddings = ", embeddings, flush=True)
+>>>>>>> Stashed changes
 
             # Encoding descriptions of all other products and using cosine similarity (vectors)
             desc_encoding = {}
