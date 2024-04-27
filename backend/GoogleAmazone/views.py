@@ -67,8 +67,7 @@ def GetRecommendationsOnProduct(request):
             all_products = Products.objects.all() # TODO: Take manufacturer and price into account as well
             print("Selected product = ", product, flush=True)
             
-            embeddings = Recommendations.objects.filter(col=id).values("row", "title_similarity", "description_similarity")[:5]
-            # print("Embeddings = ", embeddings, flush=True)
+            embeddings = Recommendations.objects.filter(col=id).values("row", "title_similarity", "description_similarity")
 
             recommendations_dict = {}
             for product in embeddings:
@@ -77,11 +76,13 @@ def GetRecommendationsOnProduct(request):
                 description_similarity = product["description_similarity"]
                 recommendations_dict[product_id] = title_similarity*0.9 + description_similarity*0.1
 
-            # Sort the recommendations by similarity
-            recommendations_dict = dict(sorted(recommendations_dict.items(), key=lambda item: item[1], reverse=True))
+            # Sort the recommendations by similarity and get the 5 most similar products
+            sorted_recommendation_dict = sorted(recommendations_dict.items(), key=lambda item: item[1], reverse=True)[:5]
+            sorted_ids = [item[0] for item in sorted_recommendation_dict]
 
-            # Get the top amount recommendations
-            recommendations = Products.objects.filter(id__in=list(recommendations_dict.keys()))[:5]
+            # Fetch the top recommended products directly in order of their similarity
+            recommendations = Products.objects.filter(id__in=sorted_ids)
+            recommendations = sorted(recommendations, key=lambda x: recommendations_dict[x.id], reverse=True)
 
             responseSerializer = ProductsSerializer(recommendations, many=True)
             return Response(responseSerializer.data, status=status.HTTP_200_OK)
