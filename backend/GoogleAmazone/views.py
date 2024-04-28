@@ -4,9 +4,14 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
+from sentence_transformers import SentenceTransformer
 # Create your views here.
+import pandas as pd
+import numpy as np
+# from openai import OpenAI
+# import openai
 
-from .models import Products
+from .models import Products, Recommendations
 from .serializers import ProductsSerializer, GetRecommendationsOnProductSerializer, GetProductsSerializer, GetProductSerializer
 
 @api_view(['GET'])
@@ -59,9 +64,25 @@ def GetRecommendationsOnProduct(request):
             id = serializer.validated_data.get("id")
             amount = serializer.validated_data.get("amount")
             product = Products.objects.get(id=id)
-            # TODO: Add a recommendation algorithm here!!!
+            all_products = Products.objects.all() # TODO: Take manufacturer and price into account as well
+            print("Selected product = ", product, flush=True)
             
-            recommendations = Products # Change this to the actual recommendations
+            embeddings = Recommendations.objects.filter(col=id).values("row", "title_similarity", "description_similarity")
+
+            recommendations_dict = {}
+            for product in embeddings:
+                product_id = product["row"]
+                title_similarity = product["title_similarity"]
+                description_similarity = product["description_similarity"]
+                recommendations_dict[product_id] = title_similarity*0.9 + description_similarity*0.1
+
+            # Sort the recommendations by similarity and get the 5 most similar products
+            sorted_recommendation_dict = sorted(recommendations_dict.items(), key=lambda item: item[1], reverse=True)[:5]
+            sorted_ids = [item[0] for item in sorted_recommendation_dict]
+
+            # Fetch the top recommended products directly in order of their similarity
+            recommendations = Products.objects.filter(id__in=sorted_ids)
+            recommendations = sorted(recommendations, key=lambda x: recommendations_dict[x.id], reverse=True)
 
             responseSerializer = ProductsSerializer(recommendations, many=True)
             return Response(responseSerializer.data, status=status.HTTP_200_OK)

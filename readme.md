@@ -17,8 +17,6 @@ docker-compose up --build
 
 ### Frontend:
 
-Kan hende dere må slette package-lock.json
-
 ```bash
 cd frontend
 npm i
@@ -54,4 +52,3 @@ npm run dev
     
   </tr>
 </table>
-And all the team members, they wil be added here soon
