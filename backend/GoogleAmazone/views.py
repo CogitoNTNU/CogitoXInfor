@@ -24,6 +24,11 @@ def GetProducts(request):
             search = serializer.validated_data.get("search")
             offset = serializer.validated_data.get("offset")
             products = Products.objects.filter(title__contains=search)[offset:offset+amount]
+
+            # Get the picture of the products
+            # Turned of this because of the rate limit of the API and the time of each search was to long for the user
+            #new_products = [GetProductPicture(product) for product in products]
+
             responseSerializer = ProductsSerializer(products, many=True)
             return Response(responseSerializer.data, status=status.HTTP_200_OK)
     except Exception as e:
@@ -65,7 +70,7 @@ def GetRecommendationsOnProduct(request):
             id = serializer.validated_data.get("id")
             amount = serializer.validated_data.get("amount")
             product = Products.objects.get(id=id)
-            all_products = Products.objects.all() # TODO: Take manufacturer and price into account as well
+            # all_products = Products.objects.all() # TODO: Take manufacturer and price into account as well
             print("Selected product = ", product, flush=True)
             
             embeddings = Recommendations.objects.filter(col=id).values("row", "title_similarity", "description_similarity")
@@ -85,7 +90,10 @@ def GetRecommendationsOnProduct(request):
             recommendations = Products.objects.filter(id__in=sorted_ids)
             recommendations = sorted(recommendations, key=lambda x: recommendations_dict[x.id], reverse=True)
 
-            responseSerializer = ProductsSerializer(recommendations, many=True)
+            # Get the picture of the products
+            new_recommendations = [GetProductPicture(product) for product in recommendations]
+
+            responseSerializer = ProductsSerializer(new_recommendations, many=True)
             return Response(responseSerializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

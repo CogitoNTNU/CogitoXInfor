@@ -6,35 +6,19 @@ interface ProductProps {
 }
 
 const ProductCard: React.FC<ProductProps> = ({ product }) => {
-  const [showFullDescription, setShowFullDescription] = useState(false);
-
-  const renderDescription = () => {
-    if (showFullDescription || product.description.split(".").length <= 3) {
-      return product.description;
-    } else {
-      const truncatedDescription =
-        product.description.split(".").slice(0, 2).join(".") + ".";
-      return truncatedDescription;
-    }
-  };
-
   return (
-    <div
-      className="max-w-xs rounded overflow-hidden shadow-lg product-card"
-      onMouseEnter={() => setShowFullDescription(true)}
-      onMouseLeave={() => setShowFullDescription(false)}
-    >
+    <div className="max-w-xs rounded overflow-hidden shadow-lg product-card max-h-100">
+      <div className="h-48 w-full overflow-hidden">
+        <img
+          className="w-full h-full object-cover object-center"
+          src={product.picture}
+          alt={product.title}
+        />
+      </div>
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2">{product.title}</div>
-        <p className="text-gray-700 text-base">
-          {renderDescription()}
-          {!showFullDescription &&
-            product.description.split(".").length > 1 && (
-              <span className="text-blue-500 cursor-pointer">
-                {" "}
-                ... (hover over the card to read more)
-              </span>
-            )}
+        <p className="text-gray-700 text-base line-clamp-3">
+          {product.description}
         </p>
       </div>
       <div className="px-6 py-4">

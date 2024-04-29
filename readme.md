@@ -44,6 +44,7 @@ npm run dev
             <sub><b>Thomas Sørensen</b></sub>
         </a>
     </td>
-    
+    <h2> More coming soon
+    </h2>
   </tr>
 </table>

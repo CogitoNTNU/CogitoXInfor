@@ -65,8 +65,8 @@ const HomePage = () => {
   };
 
   return (
-    <div className=" gap-4">
-      <div className="SearchbarContainer gap-4 m-3">
+    <div className="flex flex-col justify-center items-center">
+      <div className="w-1/2 gap-4 m-3  ">
         <FormControl fullWidth>
           <TextField
             value={searchValue}
