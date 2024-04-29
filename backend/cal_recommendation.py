@@ -1,50 +1,35 @@
 import os
 import django
 
-print("Test", flush=True)
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cogitoXInfor.settings')
 django.setup()
 
-print("Test2", flush=True)
-
-import csv
 from GoogleAmazone.models import Recommendations, Products
 from sentence_transformers import SentenceTransformer, util
 
-Recommendations.objects.all().delete()
-print("Test3", flush=True)
+import tensorflow as tf
+print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
-# Add a recommendation calculation here to precompile recommendations 
-# and add them to the database in the Recommendations table
+# Empty the Recommendations table
+Recommendations.objects.all().delete()
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
-print("Test4", flush=True)
-
 all_products = Products.objects.all()
-print("All products = ", all_products, flush=True)
-product_titles = [product.title for product in all_products]
-product_descriptions = [product.description for product in all_products]
 
-# Matching product id's with product titles
+# Matching product id's with product titles and descriptions
 id_title_embed = {}
 id_desc_embed = {}
 i = 0
-print("All products length = ", len(all_products), flush=True)
 for product in all_products:
     i += 1
-    print(i, flush=True)
+    print("Embedding product number: " + i, flush=True)
     if product.title == "" or product.description == "":
         continue
     id_title_embed[product.id] = model.encode(product.title)
     id_desc_embed[product.id] = model.encode(product.description)
     
-print("Begynner å embedde", flush=True)
-# print("id_title_embed.items() = ", id_title_embed.items(), flush=True)
-# print("id_desc_embed.items() = ", id_desc_embed.items(), flush=True)
-
-# Compute the cosine similarity between the title and description of all pairs of products and store the results in dictionaries
+# Compute the cosine similarity between the title and description of all pairs of products and store the results in two distinct dictionaries
 i = 0
 cos_sim_title = {}
 for id1, title1 in list(id_title_embed.items()):
@@ -52,8 +37,11 @@ for id1, title1 in list(id_title_embed.items()):
         i += 1
         print("Iterasjon (title): " + str(i), flush=True)
         if id1 != id2:
-            if (id1, id2) not in cos_sim_title and (id2, id1) not in cos_sim_title:
-                cos_sim_title[(id1, id2)] = util.cos_sim(title1, title2)
+            try:
+                if (id1, id2) not in cos_sim_title and (id2, id1) not in cos_sim_title:
+                    cos_sim_title[(id1, id2)] = util.cos_sim(title1, title2)
+            except: 
+                print("Error with product-pair: " + id1 + "," + id2, flush=True)
 
 i = 0
 cos_sim_desc = {}
@@ -62,11 +50,15 @@ for id1, desc1 in list(id_desc_embed.items()):
         i += 1
         print("Iterasjon (description): " + str(i), flush=True)
         if id1 != id2:
-            if (id1, id2) not in cos_sim_desc and (id2, id1) not in cos_sim_desc:
-                cos_sim_desc[(id1, id2)] = util.cos_sim(desc1, desc2)
+            try: 
+                if (id1, id2) not in cos_sim_desc and (id2, id1) not in cos_sim_desc:
+                    cos_sim_desc[(id1, id2)] = util.cos_sim(desc1, desc2)
+            except:
+                print("Error with product-pair: " + id1 + "," + id2, flush=True)
 
 combined_dict = {}
 
+# Create a dictionary with the combined cosine similarities of the title and description embeddings
 i = 0
 for key, value in cos_sim_title.items():
     i += 1
@@ -74,6 +66,7 @@ for key, value in cos_sim_title.items():
     if key in cos_sim_desc:
         combined_dict[key] = [value, cos_sim_desc[key]] # Struktur: (embedding title, embedding description)
 
+# Save the recommendations to the database
 i = 0
 for pair, sim_title in list(combined_dict.items()):
     i += 1
@@ -84,14 +77,3 @@ for pair, sim_title in list(combined_dict.items()):
     recommendation.save()
 
 print("Recommendations saved to the database", flush=True)
-# print("Cosine similarities titles = ", cos_sim_title, flush=True)
-# print("", flush=True)
-# print("Cosine similarities descriptions = ", cos_sim_desc, flush=True)
-# print("", flush=True)
-
-
-# print("Combined dictionary = ", combined_dict, flush=True)
-
-
-
-
