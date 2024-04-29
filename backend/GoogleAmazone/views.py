@@ -1,15 +1,12 @@
 from django.shortcuts import render
+import os
+import requests
+from dotenv import load_dotenv
 
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
-from sentence_transformers import SentenceTransformer
-# Create your views here.
-import pandas as pd
-import numpy as np
-# from openai import OpenAI
-# import openai
 
 from .models import Products, Recommendations
 from .serializers import ProductsSerializer, GetRecommendationsOnProductSerializer, GetProductsSerializer, GetProductSerializer
@@ -45,7 +42,11 @@ def GetProduct(request):
         if serializer.is_valid():
             id = serializer.validated_data.get("id")
             product = Products.objects.get(id=id)
-            responseSerializer = ProductsSerializer(product, many=False)
+
+            # Get the picture of the product
+            new_product = GetProductPicture(product)
+
+            responseSerializer = ProductsSerializer(new_product, many=False)
             return Response(responseSerializer.data, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -90,3 +91,21 @@ def GetRecommendationsOnProduct(request):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+# Helper function to get the pictures to the products
+def GetProductPicture(product: Products):
+    api_endpoint = "https://api.unsplash.com/search/photos"
+    load_dotenv()
+    api_key = os.getenv("ACCESS_KEY")
+    
+    # Make a get request to the API
+    data = {"query": product.title, "client_id": api_key, "per_page": 1}
+    response = requests.get(api_endpoint, params=data)
+    if response.status_code != 200:
+        print("Error in fetching the picture from the API", flush=True)
+        print("Product = ", response.status_code, flush=True)
+        return product
+
+    full_product = product
+    full_product.picture = response.json()["results"][0]["urls"]["raw"]
+    return full_product

@@ -164,5 +164,5 @@ cython_debug/
 
 # frontend
 node_modules/
-
+package-lock.json
 

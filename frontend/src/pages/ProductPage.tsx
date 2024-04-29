@@ -25,6 +25,7 @@ const ProductPage = () => {
     GetProduct({ id: productID }).then((product) => {
       if (product) {
         setProduct(product);
+        console.log(product);
       }
     });
     // get recommendations

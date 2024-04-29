@@ -1,10 +1,15 @@
 # Cogito x Infor
 
+## Information about this project
+
+Coming soon...
+
 ## Prerequisite to run the project:
 
 - Node v20 or newer
 - Docker (desktop)
 - Python v3.10 or newer
+- Git LFS
 
 ## Run project:
 
@@ -22,16 +27,6 @@ cd frontend
 npm i
 npm run dev
 ```
-
-## Table of contents
-
-### TODO:
-
-- Look at the code base
-- Look at the data
-- Find out how to add a recommendation systems
-- Implement recommendation systems
-- Test recommendation systems
 
 ## Contributors
 

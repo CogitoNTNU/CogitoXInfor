@@ -8,6 +8,7 @@ class Products(models.Model):
     price = models.FloatField("Price", default=0)
     manufacturer = models.CharField("Manufacturer", default="",max_length=256)
     description = models.TextField("Description", default="")
+    picture = models.URLField(max_length=255, default="https://www.pinclipart.com/picdir/middle/205-2052870_caution-cartoon-png-clipart.png")
 
     def __str__(self) -> str:
         return self.title

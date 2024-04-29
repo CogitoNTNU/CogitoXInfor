@@ -4,6 +4,7 @@ export interface Product {
   price: number;
   manufacturer: string;
   description: string;
+  picture: string;
 }
 
 export interface RecommendationFormat {
