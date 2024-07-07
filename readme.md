@@ -1,26 +1,28 @@
 # Cogito x Infor
 
-## Information about this project
+## Description
 
-Coming soon...
+This project is a collaboration between Cogito and [Infor AS](https://www.infor.com/nordics), aimed at exploring and developing recommendation systems. Our joint efforts focused on studying, implementing, and refining various recommendation algorithms to enhance the accuracy and effectiveness of these systems. Through this collaboration, we aimed to leverage our combined expertise to advance the in recommendation technology.
+
+This project is focused on the cross-sell type of recommendation, where similar products show, when selecting a product. This application uses publicly open data from a Amazon-Google about different product with some meta data about them.
 
 ## Prerequisite to run the project:
 
-- Node v20 or newer
-- Docker (desktop)
-- Python v3.10 or newer
-- Git LFS
+- [Node v20](https://nodejs.org/en) or newer
+- [Docker](https://www.docker.com/products/docker-desktop/) (desktop)
+- [Python v3.10](https://www.python.org/downloads/) or newer
+- [Git LFS](https://git-lfs.com)
 
 ## Run project:
 
-### Backend (must have docker running):
+### Backend (must have docker desktop running):
 
 ```bash
 cd backend
 docker-compose up --build
 ```
 
-### Frontend:
+### Frontend (Coming soon to docker compose also):
 
 ```bash
 cd frontend
