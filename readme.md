@@ -2,11 +2,9 @@
 
 ## Description
 
-This project is a collaboration between Cogito and [Infor AS](https://www.infor.com/nordics), aimed at exploring and developing recommendation systems. Our joint efforts focused on studying, implementing, and refining various recommendation algorithms to enhance the accuracy and effectiveness of these systems. Through this collaboration, we aimed to leverage our combined expertise to advance the in recommendation technology.
+This project is a collaboration between Cogito and [Infor AS](https://www.infor.com/nordics), aimed at exploring and developing recommendation systems. Our partnership resulted in a fully-functioning MVP on our own custom test-website. The website contains sample-products fetched from Amazon, and will recommend similar products to the one the user clicks on, so called "cross-sell"-recommendation.
 
-This project is focused on the cross-sell type of recommendation, where similar products show, when selecting a product. This application uses publicly open data from a Amazon-Google about different product with some meta data about them.
-
-## Prerequisite to run the project:
+## Prerequisites to run the project:
 
 - [Node v20](https://nodejs.org/en) or newer
 - [Docker](https://www.docker.com/products/docker-desktop/) (desktop)
@@ -15,7 +13,7 @@ This project is focused on the cross-sell type of recommendation, where similar 
 
 ## Run project:
 
-### Backend (must have docker desktop running):
+### Backend (must have Docker Desktop running):
 
 ```bash
 cd backend
