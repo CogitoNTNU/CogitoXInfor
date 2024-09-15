@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Product } from "../types";
 import { GetProducts } from "../services/GetProducts";
 import ProductCardGrid from "../components/ProductCardGrid";
-import { effect, signal } from "@preact/signals-react";
+import { signal } from "@preact/signals-react";
 import debounce from "lodash/debounce";
 import { FormControl, InputAdornment, TextField } from "@mui/material";
 

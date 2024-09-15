@@ -3,17 +3,16 @@ import { Product } from "../types";
 import { useEffect, useState } from "react";
 import { GetProduct } from "../services/GetProduct";
 import { GetRecommendations } from "../services/GetRecommentadtions";
-import ProductCard from "../components/ProductCard";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
-import { Button, Typography, styled } from "@mui/material";
+import { Button, styled } from "@mui/material";
 import ProductCardGrid from "../components/ProductCardGrid";
 
 const ProductPage = () => {
   const { productID } = useParams<{ productID: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [recommendations, setRecommendations] = useState<Product[] | null>(
-    null
+    null,
   );
 
   useEffect(() => {
@@ -25,17 +24,20 @@ const ProductPage = () => {
     GetProduct({ id: productID }).then((product) => {
       if (product) {
         setProduct(product);
-        console.log(product);
+        console.log("Product = ", product);
       }
     });
     // get recommendations
-    GetRecommendations({ id: productID, amount: 10 }).then(
-      (recommendations) => {
+    GetRecommendations({ id: productID, amount: 5 })
+      .then((recommendations) => {
         if (recommendations) {
+          console.log("Recommendations = ", recommendations);
           setRecommendations(recommendations);
         }
-      }
-    );
+      })
+      .catch((error) => {
+        console.error("Error in getRecommendations:", error);
+      });
   }, [productID]);
 
   if (!product) {

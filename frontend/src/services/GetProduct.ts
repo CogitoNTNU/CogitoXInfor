@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GetProduct, Product } from "../types";
+import type { GetProduct, Product } from "../types";
 import { apiRoutes } from "../routes/routeDefinitions";
 
 const GetProduct = async (params: GetProduct): Promise<Product | null> => {
