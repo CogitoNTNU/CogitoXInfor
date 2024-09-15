@@ -8,34 +8,35 @@
 
 This project is a collaboration between Cogito and [Infor AS](https://www.infor.com/nordics), aimed at exploring and developing recommendation systems. Our partnership has so far resulted in a fully-functioning MVP on our own custom test-website. The website contains sample-products fetched from Amazon, and will recommend similar products to the one the user clicks on, so called "cross-sell"-recommendation. Further development will be in collaboration with one of Infors clients, and our goal is to help them make use of AI-powered recommendation systems to recommend relevant products to their customers in order to drive growth.
 
-
 ### Prerequisites
-- Ensure that git is installed on your machine. [Download Git](https://git-scm.com/downloads) 
+
+- Ensure that Git is installed on your machine. [Download Git](https://git-scm.com/downloads)
 - Ensure that Git LFS is installed on your machine. [Download Git LFS](https://git-lfs.com)
 - Docker is used for building the entire application. [Download Docker](https://www.docker.com/products/docker-desktop)
 
-
-
 ### Configuration
+
 Start by making a copy of the `.env.example` file and renaming it to `.env`. This file contains the environment variables that the application needs to run. You can change the values of the variables to match your environment.
 
 Run the following command in the root folder to copy the `.env.example` file:
+
 ```bash
 cp .env.example .env
 ```
+
 Then, replace the placeholder values with your own values in the `.env` file. You can generate an API-key [here](https://developers.google.com/custom-search/v1/introduction)
 
 ## Usage
+
 To run the project run the following command in the root folder:
 
 ```bash
 docker-compose up --build
 ```
 
-
 ## Contributors
-This project would not have been possible without the hard work and dedication of all of the contributors. Thank you for the time and effort you have put into making TutorAI a reality.
 
+This project would not have been possible without the hard work and dedication of all of the contributors. Thank you for the time and effort you have put into making TutorAI a reality.
 
 <table align="center">
   <tr>
