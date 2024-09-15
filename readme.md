@@ -44,8 +44,8 @@ npm run dev
             <sub><b>Thomas Sørensen</b></sub>
         </a>
     <td align="center">
-        <a href="https://github.com/Jensern1">
-            <img src="https://github.com/Jensern1.png?size=100" width="100px;" alt="Jens Martin Norheim Berget"/><br />
+        <a href="https://github.com/jmnorheim">
+            <img src="https://github.com/jmnorheim.png?size=100" width="100px;" alt="Jens Martin Norheim Berget"/><br />
             <sub><b>Jens Martin Norheim Berget</b></sub>
         </a>
     <td align="center">
