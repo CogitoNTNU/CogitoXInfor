@@ -2,7 +2,7 @@
 
 ## Description
 
-This project is a collaboration between Cogito and [Infor AS](https://www.infor.com/nordics), aimed at exploring and developing recommendation systems. Our partnership resulted in a fully-functioning MVP on our own custom test-website. The website contains sample-products fetched from Amazon, and will recommend similar products to the one the user clicks on, so called "cross-sell"-recommendation.
+This project is a collaboration between Cogito and [Infor AS](https://www.infor.com/nordics), aimed at exploring and developing recommendation systems. Our partnership has so far resulted in a fully-functioning MVP on our own custom test-website. The website contains sample-products fetched from Amazon, and will recommend similar products to the one the user clicks on, so called "cross-sell"-recommendation. Further development will be in collaboration with one of Infors clients, and our goal is to help them make use of AI-powered recommendation systems to recommend relevant products to their customers in order to drive growth.
 
 ## Prerequisites to run the project:
 
