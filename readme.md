@@ -34,6 +34,10 @@ To run the project run the following command in the root folder:
 docker-compose up --build
 ```
 
+## Documentation
+
+For more information on how to setup the application for development, please refer to the [Developer Setup](docs/manuals/developer_setup.md) documentation.
+
 ## Contributors
 
 This project would not have been possible without the hard work and dedication of all of the contributors. Thank you for the time and effort you have put into making TutorAI a reality.
