@@ -46,7 +46,7 @@ This project would not have been possible without the hard work and dedication o
   <tr>
     <td align="center">
         <a href="https://github.com/danielnhansen">
-            <img src="https://github.com/Spiderpig02.png?size=100" width="100px;" alt="Daniel Neukirch Hansen"/><br />
+            <img src="https://github.com/danielnhansen.png?size=100" width="100px;" alt="Daniel Neukirch Hansen"/><br />
             <sub><b>Daniel Neukirch Hansen</b></sub>
         </a>
     </td>
